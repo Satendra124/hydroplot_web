@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Canvas, { Scale } from './src/canvas';
 import Stiff from './src/graphs/stiff';
+import stiffGraphMockData from './src/data/stiff.mock';
 
 function App() {
   const canvasRef = useRef(null);
@@ -15,7 +16,7 @@ function App() {
     if(!context) return;
     const canvas = new Canvas(context,new Scale().fromValue(1,10));
     const stiffDiagram = new Stiff(canvas);
-    stiffDiagram.draw([]);
+    stiffDiagram.draw(stiffGraphMockData);
   },[canvasRef]);
   return (
     <canvas id="main_canvas" ref={canvasRef}></canvas>
