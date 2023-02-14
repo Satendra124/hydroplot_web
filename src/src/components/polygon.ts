@@ -23,7 +23,7 @@ export const createPolygon = (
 	ctx.beginPath();
 	ctx.strokeStyle = options.borderColor!;
 
-	for (let i = 1; i < points.length; i++) {
+	for (let i = 0; i < points.length; i++) {
 		ctx.lineTo(points[i].x, points[i].y);
 		ctx.stroke();
 	}

@@ -129,7 +129,8 @@ export const createAxis = (
 				continue;
 			}
 			ctx.fillText(
-				cnt.toString(),
+				//@ts-ignore
+				(cnt * options.markingUnit).toString(),
 				i * Math.cos(angle) + point.x + xShift,
 				i * Math.sin(angle) + point.y + yShift,
 				20
