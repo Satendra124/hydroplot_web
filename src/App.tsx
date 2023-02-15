@@ -4,14 +4,16 @@ import './App.css';
 import Canvas, { Scale } from './src/canvas';
 import Stiff from './src/graphs/stiff';
 import stiffGraphMockData from './src/data/stiff.mock';
+import Piper from "./src/graphs/piper";
 
 function App() {
-  const canvasRef = useRef(null);
-  useEffect(()=>{
-    if(!canvasRef.current) return;
-    const canvasElement:HTMLCanvasElement = canvasRef.current;
-    canvasElement.height = 500;
+	const canvasRef = useRef(null);
+	useEffect(() => {
+		if (!canvasRef.current) return;
+		const canvasElement: HTMLCanvasElement = canvasRef.current;
+		canvasElement.height = 500;
 		canvasElement.width = 500;
+
     const context = canvasElement.getContext("2d");
     if(!context) return;
     const canvas = new Canvas(context,new Scale().fromValue(1,10));
