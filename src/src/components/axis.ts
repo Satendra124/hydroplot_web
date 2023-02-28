@@ -1,36 +1,47 @@
-import Canvas, { Scale } from "../canvas";
+import Canvas from "../canvas";
 
-const fixTextPlacement = (angle: number) => {
+const sin = (angle: number) => Math.sin(angle);
+const cos = (angle: number) => Math.cos(angle);
+const pi = Math.PI;
+
+const fixTextPlacement = (angle: number, position: string) => {
 	let xShift = 0,
 		yShift = 0;
 
+	const right: boolean = position === "right" ? true : false;
+
+	// BEWARE: COMPLEX STUFF AHEAD. This is a hacky solution to the problem of text placement
 	if (angle >= 0 && angle <= Math.PI / 2) {
-		yShift = 2;
-		xShift = 10;
-		if (angle < Math.PI / 4) {
-			xShift = 2;
-			yShift = -5;
+		if (right) {
+			xShift = -10 * sin(angle);
+			yShift = 10 * cos(angle);
+		} else {
+			xShift = 7 * sin(angle);
+			yShift = -7 * cos(angle);
 		}
 	} else if (angle > Math.PI / 2 && angle <= Math.PI) {
-		xShift = -2;
-		yShift = -5;
-		if (angle < 3 * (Math.PI / 4)) {
-			xShift = -10;
-			yShift = -2;
+		if (right) {
+			xShift = -7 * sin(angle);
+			yShift = 7 * cos(angle);
+		} else {
+			xShift = 9 * sin(angle);
+			yShift = -9 * cos(angle);
 		}
 	} else if (angle > Math.PI && angle <= (3 * Math.PI) / 2) {
-		xShift = 10;
-		yShift = 2;
-		if (angle < 5 * (Math.PI / 4)) {
-			xShift = 2;
-			yShift = -5;
+		if (right) {
+			xShift = -7 * sin(angle);
+			yShift = 7 * cos(angle);
+		} else {
+			xShift = 10 * sin(angle);
+			yShift = -10 * cos(angle);
 		}
 	} else if (angle > (3 * Math.PI) / 2 && angle < 2 * Math.PI) {
-		xShift = -2;
-		yShift = -5;
-		if (angle < 7 * (Math.PI / 4)) {
-			xShift = -10;
-			yShift = -2;
+		if (right) {
+			xShift = -10 * sin(angle);
+			yShift = 10 * cos(angle);
+		} else {
+			xShift = 9 * sin(angle);
+			yShift = -9 * cos(angle);
 		}
 	}
 
@@ -48,6 +59,8 @@ export const createAxis = (
 		negative?: boolean;
 		baseValue?: boolean;
 		markingUnit?: number;
+		position?: string;
+		axisName?: string;
 	}
 ) => {
 	if (!options) options = {};
@@ -57,8 +70,11 @@ export const createAxis = (
 		negative: false,
 		baseValue: false,
 		markingUnit: 2,
+		position: "right",
 	};
 	options = { ...defaultOptions, ...options };
+
+	// console.log(options);
 
 	angle = angle * (Math.PI / 180);
 
@@ -80,7 +96,7 @@ export const createAxis = (
 
 	ctx.textAlign = "center";
 
-	let { xShift, yShift } = fixTextPlacement(angle);
+	let { xShift, yShift } = fixTextPlacement(angle, options.position!);
 
 	if (options.majorMarks) {
 		let cnt = 0;
