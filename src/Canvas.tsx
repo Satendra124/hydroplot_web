@@ -5,6 +5,11 @@ import Piper from "./src/graphs/piper";
 import LineGraph from "./src/graphs/lineGraph";
 import PieChart from "./src/graphs/pieChart";
 import TornadoDiagram from "./src/graphs/tornadoDiagram";
+import stiffGraphMockData from "./src/data/stiff.mock";
+import scatterPlotMockData from "./src/data/scatter.mock";
+import lineGraphMockData from "./src/data/line.mock";
+import pieChartMockData from "./src/data/pie.mock";
+import tornadoDiagramMockData from "./src/data/tornado.mock";
 
 const Canvas = ({ graph }: { graph: string }) => {
 	const canvasRef = useRef(null);
@@ -20,22 +25,22 @@ const Canvas = ({ graph }: { graph: string }) => {
 
 		if (graph === "Stiff Diagram") {
 			const stiffDiagram = new Stiff(context);
-			stiffDiagram.draw([]);
+			stiffDiagram.draw(stiffGraphMockData);
 		} else if (graph === "Piper Diagram") {
 			const piperDiagram = new Piper(context);
 			piperDiagram.draw([]);
 		} else if (graph === "Scatter Plot") {
 			const scatterPlot = new ScatterPlot(context);
-			scatterPlot.draw([]);
+			scatterPlot.draw(scatterPlotMockData);
 		} else if (graph === "Line Graph") {
 			const lineGraph = new LineGraph(context);
-			lineGraph.draw([]);
+			lineGraph.draw(lineGraphMockData);
 		} else if (graph === "Pie Chart") {
 			const pieChart = new PieChart(context);
-			pieChart.draw([]);
+			pieChart.draw(pieChartMockData);
 		} else if (graph === "Tornado Diagram") {
 			const tornadoDiagram = new TornadoDiagram(context);
-			tornadoDiagram.draw([]);
+			tornadoDiagram.draw(tornadoDiagramMockData);
 		}
 
 		// const scatterPlot = new ScatterPlot(context);

@@ -57,12 +57,12 @@ class LineGraph implements Graph {
 		});
 	}
 
-	validateData(data: []): void {
+	validateData(data: any): void {
 		const error = false;
 		if (error) throw Error("Data format incorrect");
 	}
 
-	loadData(data: []) {
+	loadData(data: any) {
 		this.validateData(data);
 		this.data = data;
 	}
@@ -99,7 +99,7 @@ class LineGraph implements Graph {
 		context.fill();
 	}
 
-	draw(data: []) {
+	draw(data: any) {
 		this.drawAxis();
 		this.loadData(data);
 		this.plotData();
