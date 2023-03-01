@@ -1,4 +1,4 @@
-import Canvas from "../canvas";
+import Canvas, { Scale } from "../canvas";
 import { createAxis } from "../components/axis";
 import { createPolygon } from "../components/polygon";
 import Graph from "./Graph";
@@ -13,8 +13,9 @@ class Stiff implements Graph {
 	context: Canvas;
 	data: StiffGraphData[][] = [];
 	zero: { x: number; y: number } = { x: 300, y: 300 };
-	constructor(context: Canvas) {
-		this.context = context;
+	constructor(context: CanvasRenderingContext2D) {
+		const canvas = new Canvas(context, new Scale().fromValue(1, 15));
+		this.context = canvas;
 	}
 	setOriginPoint(point: { x: number; y: number }) {
 		this.zero.x = point.x;
@@ -22,6 +23,9 @@ class Stiff implements Graph {
 	}
 
 	drawAxis() {
+		const context = this.context.canvasContext;
+		context.clearRect(0, 0, 500, 500);
+
 		createAxis(this.context, this.zero, 0, 13, {
 			baseValue: true,
 		});
@@ -43,14 +47,12 @@ class Stiff implements Graph {
 
 	plotData() {
 		const context = this.context.canvasContext;
-		console.log(this.data);
 
 		for (let i = 0; i < this.data.length; i++) {
 			const points = this.data[i].map((item: StiffGraphData) => ({
 				x: this.context.scale.calculateVirtual(item.value) + this.zero.x,
 				y: this.context.scale.calculateVirtual(item.position) + this.zero.y,
 			}));
-			console.log(points);
 			createPolygon(this.context, points, 0, {
 				color: "red",
 				shouldFill: true,
