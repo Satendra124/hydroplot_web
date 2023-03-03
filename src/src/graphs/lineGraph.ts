@@ -54,6 +54,7 @@ class LineGraph implements Graph {
 		});
 		createAxis(this.context, this.zero, 270, 20, {
 			markingUnit: 5,
+			position: "left",
 		});
 	}
 
