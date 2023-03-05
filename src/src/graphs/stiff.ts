@@ -12,7 +12,7 @@ export interface StiffGraphData {
 class Stiff implements Graph {
 	context: Canvas;
 	data: StiffGraphData[][] = [];
-	zero: { x: number; y: number } = { x: 300, y: 300 };
+	zero: { x: number; y: number } = { x: 250, y: 50 };
 	constructor(context: CanvasRenderingContext2D) {
 		const canvas = new Canvas(context, new Scale().fromValue(1, 15));
 		this.context = canvas;
@@ -28,6 +28,7 @@ class Stiff implements Graph {
 
 		createAxis(this.context, this.zero, 0, 13, {
 			baseValue: true,
+			position: "left",
 		});
 		createAxis(this.context, this.zero, 180, 13);
 		createAxis(this.context, this.zero, 90, 18, {
@@ -64,9 +65,9 @@ class Stiff implements Graph {
 		context.font = "bold 13px Arial";
 		context.fillStyle = "black";
 		context.fill();
-		context.fillText("Meq/L", this.zero.x, this.zero.y - 20);
-		context.fillText("Cations", this.zero.x - 100, this.zero.y - 20);
-		context.fillText("Anions", this.zero.x + 100, this.zero.y - 20);
+		context.fillText("Meq/L", this.zero.x, this.zero.y - 30);
+		context.fillText("Cations", this.zero.x - 100, this.zero.y - 30);
+		context.fillText("Anions", this.zero.x + 100, this.zero.y - 30);
 		context.fillStyle = "red";
 		context.fill();
 	}

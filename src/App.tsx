@@ -14,7 +14,7 @@ function App() {
 	}, [canvasRef]);
 	return (
 		<>
-			<canvas id="main_canvas" ref={canvasRef}></canvas>
+			{/* <canvas id="main_canvas" ref={canvasRef}></canvas> */}
 			<Home />
 		</>
 	);

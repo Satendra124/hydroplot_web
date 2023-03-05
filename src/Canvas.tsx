@@ -13,6 +13,8 @@ import tornadoDiagramMockData from "./src/data/tornado.mock";
 
 const Canvas = ({ graph }: { graph: string }) => {
 	const canvasRef = useRef(null);
+
+	console.log(canvasRef.current);
 	useEffect(() => {
 		if (!canvasRef.current) return;
 		const canvasElement: HTMLCanvasElement = canvasRef.current;
@@ -20,8 +22,6 @@ const Canvas = ({ graph }: { graph: string }) => {
 		canvasElement.width = 500;
 		const context = canvasElement.getContext("2d");
 		if (!context) return;
-		const stiffDiagram = new Stiff(context);
-		stiffDiagram.draw([]);
 
 		if (graph === "Stiff Diagram") {
 			const stiffDiagram = new Stiff(context);
@@ -42,18 +42,6 @@ const Canvas = ({ graph }: { graph: string }) => {
 			const tornadoDiagram = new TornadoDiagram(context);
 			tornadoDiagram.draw(tornadoDiagramMockData);
 		}
-
-		// const scatterPlot = new ScatterPlot(context);
-		// scatterPlot.draw([]);
-
-		// const lineGraph = new LineGraph(context);
-		// lineGraph.draw([]);
-
-		// const pieChart = new PieChart(context);
-		// pieChart.draw([]);
-
-		// const tornadoDiagram = new TornadoDiagram(context);
-		// tornadoDiagram.draw([]);
 	}, [canvasRef, graph]);
 
 	return <canvas id="main_canvas" ref={canvasRef}></canvas>;
