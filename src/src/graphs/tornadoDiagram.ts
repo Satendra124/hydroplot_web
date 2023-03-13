@@ -4,7 +4,11 @@ import Graph from "./Graph";
 
 class TornadoDiagram implements Graph {
 	context: Canvas;
-	data: [] = [];
+	data: {
+		ionType: string;
+		color: string;
+		ions: { name: string; value: number }[];
+	}[] = [];
 	zero: { x: number; y: number } = { x: 250, y: 50 };
 	graphData: {
 		ionType: string;
@@ -76,7 +80,7 @@ class TornadoDiagram implements Graph {
 	plotData() {
 		const context = this.context.canvasContext;
 
-		for (let ionData of this.graphData) {
+		for (let ionData of this.data) {
 			context.beginPath();
 			let direction = ionData.ionType === "Anion" ? 1 : -1;
 

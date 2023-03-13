@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { Button } from "@mui/material";
-
 import { useCSVReader } from "react-papaparse";
+import getFormattedData from "../utils/dataParser";
 
-export default function CSVReader() {
+export default function CSVReader({
+	graph,
+	setFormattedData,
+}: {
+	graph: string;
+	setFormattedData: any;
+}) {
 	const { CSVReader } = useCSVReader();
 
 	const [file, setFile] = useState([]);
@@ -12,9 +18,10 @@ export default function CSVReader() {
 		if (file.length === 0) {
 			return;
 		}
-
-		localStorage.setItem("file", JSON.stringify(file));
-		console.log(localStorage.getItem("file"));
+		setFormattedData({
+			type: graph,
+			data: getFormattedData(file, graph),
+		});
 	};
 
 	return (
