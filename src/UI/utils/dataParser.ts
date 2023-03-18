@@ -60,38 +60,36 @@ const getFormattedData = (data: any, graph: string) => {
 			});
 			break;
 		case "Tornado Diagram":
-			return [
+			const tornadoDiagramUserData: any = [
 				{
 					ionType: "Cation",
 					color: "red",
-					ions: [
-						{ name: "Na+", value: 1 },
-						{ name: "K+", value: 2 },
-						{ name: "Li+", value: 3 },
-						{ name: "Mg2+", value: 4 },
-						{ name: "Ca2+", value: 5 },
-						{ name: "NH4+", value: 6 },
-						{ name: "Mn2+", value: 7 },
-						{ name: "Fe2+", value: 8 },
-						{ name: "Fe3+", value: 9 },
-					],
+					ions: [],
 				},
 				{
 					ionType: "Anion",
 					color: "blue",
-					ions: [
-						{ name: "Cl-", value: 1 },
-						{ name: "SO4-2", value: 2 },
-						{ name: "NO3-", value: 3 },
-						{ name: "CO3-2", value: 4 },
-						{ name: "PO4-3", value: 5 },
-						{ name: "F-", value: 6 },
-						{ name: "HCO3-", value: 7 },
-						{ name: "OH-", value: 8 },
-						{ name: "H2PO4-", value: 9 },
-					],
+					ions: [],
 				},
 			];
+
+			data.forEach((item: any) => {
+				if (item[2] === "cation") {
+					tornadoDiagramUserData[0].ions.push({
+						name: item[0],
+						value: Number(item[1]),
+					});
+				} else {
+					tornadoDiagramUserData[1].ions.push({
+						name: item[0],
+						value: Number(item[1]),
+					});
+				}
+			});
+
+			console.log(tornadoDiagramUserData);
+
+			return tornadoDiagramUserData;
 			break;
 	}
 };

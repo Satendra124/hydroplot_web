@@ -39,7 +39,6 @@ class ScatterPlot implements Graph {
 	}
 
 	plotData() {
-		console.log(this.data);
 		const context = this.context.canvasContext;
 		let average: [number, number] = [0, 0];
 
