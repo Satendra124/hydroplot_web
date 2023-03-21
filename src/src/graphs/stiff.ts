@@ -11,7 +11,7 @@ export interface StiffGraphData {
 
 class Stiff implements Graph {
 	context: Canvas;
-	data: StiffGraphData[][] = [];
+	data: StiffGraphData[] = [];
 	zero: { x: number; y: number } = { x: 250, y: 50 };
 	constructor(context: CanvasRenderingContext2D) {
 		const canvas = new Canvas(context, new Scale().fromValue(1, 15));
@@ -36,12 +36,12 @@ class Stiff implements Graph {
 		});
 	}
 
-	validateData(data: StiffGraphData[][]): void {
+	validateData(data: StiffGraphData[]): void {
 		const error = false;
 		if (error) throw Error("Data format incorrect");
 	}
 
-	loadData(data: StiffGraphData[][]) {
+	loadData(data: StiffGraphData[]) {
 		this.validateData(data);
 		this.data = data;
 	}
@@ -49,17 +49,15 @@ class Stiff implements Graph {
 	plotData() {
 		const context = this.context.canvasContext;
 
-		for (let i = 0; i < this.data.length; i++) {
-			const points = this.data[i].map((item: StiffGraphData) => ({
-				x: this.context.scale.calculateVirtual(item.value) + this.zero.x,
-				y: this.context.scale.calculateVirtual(item.position) + this.zero.y,
-			}));
-			createPolygon(this.context, points, 0, {
-				color: "red",
-				shouldFill: true,
-				borderColor: "blue",
-			});
-		}
+		const points = this.data.map((item: StiffGraphData) => ({
+			x: this.context.scale.calculateVirtual(item.value) + this.zero.x,
+			y: this.context.scale.calculateVirtual(item.position) + this.zero.y,
+		}));
+		createPolygon(this.context, points, 0, {
+			color: "red",
+			shouldFill: true,
+			borderColor: "blue",
+		});
 
 		// context.moveTo(xInitial, yInitial - 10);
 		context.font = "bold 13px Arial";
@@ -72,7 +70,7 @@ class Stiff implements Graph {
 		context.fill();
 	}
 
-	draw(data: StiffGraphData[][]) {
+	draw(data: StiffGraphData[]) {
 		this.drawAxis();
 		this.loadData(data);
 		this.plotData();

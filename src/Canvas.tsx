@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Stiff from "./src/graphs/stiff";
 import ScatterPlot from "./src/graphs/scatterPlot";
 import Piper from "./src/graphs/piper";
@@ -11,10 +11,24 @@ import lineGraphMockData from "./src/data/line.mock";
 import pieChartMockData from "./src/data/pie.mock";
 import tornadoDiagramMockData from "./src/data/tornado.mock";
 
-const Canvas = ({ graph }: { graph: string }) => {
+const drawDiagram = (
+	graph: any,
+	graphType: string,
+	userData: any,
+	mockData: any
+) => {
+	if (userData.type === graphType && userData.data.length > 0) {
+		console.log("Drawing User Data");
+		graph.draw(userData.data);
+	} else {
+		console.log("Drawing Mock Data");
+		graph.draw(mockData);
+	}
+};
+
+const Canvas = ({ graph, userData }: { graph: string; userData: any }) => {
 	const canvasRef = useRef(null);
 
-	console.log(canvasRef.current);
 	useEffect(() => {
 		if (!canvasRef.current) return;
 		const canvasElement: HTMLCanvasElement = canvasRef.current;
@@ -25,24 +39,25 @@ const Canvas = ({ graph }: { graph: string }) => {
 
 		if (graph === "Stiff Diagram") {
 			const stiffDiagram = new Stiff(context);
+			drawDiagram(stiffDiagram, graph, userData, stiffGraphMockData);
 			stiffDiagram.draw(stiffGraphMockData);
 		} else if (graph === "Piper Diagram") {
 			const piperDiagram = new Piper(context);
 			piperDiagram.draw([]);
 		} else if (graph === "Scatter Plot") {
 			const scatterPlot = new ScatterPlot(context);
-			scatterPlot.draw(scatterPlotMockData);
+			drawDiagram(scatterPlot, graph, userData, scatterPlotMockData);
 		} else if (graph === "Line Graph") {
 			const lineGraph = new LineGraph(context);
-			lineGraph.draw(lineGraphMockData);
+			drawDiagram(lineGraph, graph, userData, lineGraphMockData);
 		} else if (graph === "Pie Chart") {
 			const pieChart = new PieChart(context);
-			pieChart.draw(pieChartMockData);
+			drawDiagram(pieChart, graph, userData, pieChartMockData);
 		} else if (graph === "Tornado Diagram") {
 			const tornadoDiagram = new TornadoDiagram(context);
-			tornadoDiagram.draw(tornadoDiagramMockData);
+			drawDiagram(tornadoDiagram, graph, userData, tornadoDiagramMockData);
 		}
-	}, [canvasRef, graph]);
+	}, [canvasRef, graph, userData]);
 
 	return <canvas id="main_canvas" ref={canvasRef}></canvas>;
 };
