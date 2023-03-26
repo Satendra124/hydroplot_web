@@ -15,9 +15,11 @@
 		"@types/react-dom": "^18.0.10",
 		"csv-parse": "^5.3.5",
 		"fs": "^0.0.1-security",
+		"plotly.js": "^2.20.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-papaparse": "^4.1.0",
+		"react-plotly.js": "^2.6.0",
 		"react-scripts": "5.0.1",
 		"typescript": "^4.9.5",
 		"web-vitals": "^2.1.4"

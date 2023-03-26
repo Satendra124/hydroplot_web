@@ -4,20 +4,30 @@ import CSVReader from "../components/CSVReader";
 import Button from "@mui/material/Button";
 
 const Home = () => {
-	const diagramTypes: string[] = [
-		"Stiff Diagram",
-		"Piper Diagram",
-		"Scatter Plot",
-		"Line Graph",
-		"Pie Chart",
-		"Tornado Diagram",
-		"Stiff Diagram",
-		"Piper Diagram",
-		"Scatter Plot",
-		"Line Graph",
-		"Pie Chart",
-		"Tornado Diagram",
+	const diagramTypes: { name: string; type: string }[] = [
+		{ name: "Stiff Diagram", type: "canvas" },
+		{ name: "Scatter Plot", type: "canvas" },
+		{ name: "Line Graph", type: "canvas" },
+		{ name: "Pie Chart", type: "canvas" },
+		{ name: "Tornado Diagram", type: "canvas" },
+		{ name: "Box Plot", type: "div" },
+		{ name: "Stiff Diagram", type: "canvas" },
+		{ name: "Scatter Plot", type: "canvas" },
+		{ name: "Line Graph", type: "canvas" },
+		{ name: "Pie Chart", type: "canvas" },
+		{ name: "Tornado Diagram", type: "canvas" },
+		{ name: "Box Plot", type: "div" },
 	];
+
+	const checkIfCanvas = (graph: string) => {
+		let res = false;
+		diagramTypes.forEach((diagram) => {
+			if (diagram.name === graph && diagram.type === "canvas") {
+				res = true;
+			}
+		});
+		return res;
+	};
 
 	const [graph, setGraph] = useState("Stiff Diagram");
 
@@ -39,6 +49,8 @@ const Home = () => {
 		}
 	};
 
+	console.log(graph);
+
 	return (
 		<div className="w-screen h-screen bg-slate-200">
 			<div className="w-full h-24 dark-primary-bg flex justify-between items-center gap-6 px-6 fixed left-0 top-0">
@@ -50,19 +62,28 @@ const Home = () => {
 					<div
 						key={index}
 						onClick={() => {
-							setGraph(diagramType);
+							setGraph(diagramType.name);
 							// console.log(graph);
 						}}
 						className="w-full h-24 light-primary-bg p-3 text-lg text-white text-center grid place-items-center hover:cursor-pointer">
-						{diagramType}
+						{diagramType.name}
 					</div>
 				))}
 			</div>
 			<div className="h-[calc(100vh-6rem)] w-5/6 fixed light-tertiary-bg right-0 top-24 grid place-items-center ">
-				<Button variant="contained" onClick={handleExport}>
+				<Button
+					variant="contained"
+					onClick={handleExport}
+					className="export-button">
 					Export Diagram
 				</Button>
-				<Canvas graph={graph} userData={formattedDataFromCSV} />
+				{checkIfCanvas(graph) ? (
+					<Canvas graph={graph} userData={formattedDataFromCSV} />
+				) : (
+					<div id="plotly_graph"></div>
+				)}
+
+				{/* <Canvas graph={graph} userData={formattedDataFromCSV} /> */}
 			</div>
 		</div>
 	);

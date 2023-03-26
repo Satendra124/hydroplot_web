@@ -39,3 +39,15 @@
 .sidebar::-webkit-scrollbar-corner {
 	border-radius: 10px;
 }
+
+#plotly_graph {
+	width: 500px;
+	height: 500px;
+	background-color: #fff;
+}
+
+.export-button {
+	position: absolute !important;
+	top: 10px;
+	right: 10px;
+}
