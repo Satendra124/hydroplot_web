@@ -33,7 +33,7 @@ export default function CSVReader({
 			{({ getRootProps, acceptedFile, getRemoveFileProps }: any) => (
 				<>
 					<div className="flex items-center">
-						<div className="w-84 h-16 bg-white rounded-lg p-2 text-center flex justify-around items-center">
+						<div className="w-84 h-16 rounded-lg p-2 text-center flex justify-around items-center">
 							<Button
 								variant="contained"
 								sx={{
@@ -42,7 +42,7 @@ export default function CSVReader({
 								{...getRootProps()}>
 								Browse file
 							</Button>
-							<div className="w-40 h-12 bg-white rounded-lg p-2 text-center">
+							<div className="w-40 h-12 rounded-lg p-2 text-center">
 								{file.length !== 0 ? (
 									<p>{acceptedFile.name}</p>
 								) : (

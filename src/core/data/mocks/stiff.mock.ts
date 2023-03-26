@@ -1,4 +1,4 @@
-import { StiffGraphData } from "../graphs/stiff";
+import { StiffGraphData } from "../../graphs/stiff";
 
 const stiffGraphMockData: StiffGraphData[] = [
 	{ name: "Na+", value: -7.2, position: 1 },

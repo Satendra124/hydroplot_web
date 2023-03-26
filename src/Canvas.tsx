@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import Stiff from "./src/graphs/stiff";
-import ScatterPlot from "./src/graphs/scatterPlot";
-import Piper from "./src/graphs/piper";
-import LineGraph from "./src/graphs/lineGraph";
-import PieChart from "./src/graphs/pieChart";
-import TornadoDiagram from "./src/graphs/tornadoDiagram";
-import stiffGraphMockData from "./src/data/stiff.mock";
-import scatterPlotMockData from "./src/data/scatter.mock";
-import lineGraphMockData from "./src/data/line.mock";
-import pieChartMockData from "./src/data/pie.mock";
-import tornadoDiagramMockData from "./src/data/tornado.mock";
+import Stiff from "./core/graphs/stiff";
+import ScatterPlot from "./core/graphs/scatterPlot";
+import Piper from "./core/graphs/piper";
+import LineGraph from "./core/graphs/lineGraph";
+import PieChart from "./core/graphs/pieChart";
+import TornadoDiagram from "./core/graphs/tornadoDiagram";
+import stiffGraphMockData from "./core/data/mocks/stiff.mock";
+import scatterPlotMockData from "./core/data/mocks/scatter.mock";
+import lineGraphMockData from "./core/data/mocks/line.mock";
+import pieChartMockData from "./core/data/mocks/pie.mock";
+import tornadoDiagramMockData from "./core/data/mocks/tornado.mock";
 
 const drawDiagram = (
 	graph: any,
@@ -40,7 +40,6 @@ const Canvas = ({ graph, userData }: { graph: string; userData: any }) => {
 		if (graph === "Stiff Diagram") {
 			const stiffDiagram = new Stiff(context);
 			drawDiagram(stiffDiagram, graph, userData, stiffGraphMockData);
-			stiffDiagram.draw(stiffGraphMockData);
 		} else if (graph === "Piper Diagram") {
 			const piperDiagram = new Piper(context);
 			piperDiagram.draw([]);

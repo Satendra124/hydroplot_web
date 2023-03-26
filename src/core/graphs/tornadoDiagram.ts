@@ -38,7 +38,34 @@ class TornadoDiagram implements Graph {
 
 	loadData(data: any) {
 		this.validateData(data);
-		this.data = data;
+		const tornadoDiagramUserData: any = [
+			{
+				ionType: "Cation",
+				color: "red",
+				ions: [],
+			},
+			{
+				ionType: "Anion",
+				color: "blue",
+				ions: [],
+			},
+		];
+
+		data.split("\n").forEach((line: any) => {
+			const item = line.split(",");
+			if (item[2] === "cation") {
+				tornadoDiagramUserData[0].ions.push({
+					name: item[0],
+					value: Number(item[1]),
+				});
+			} else {
+				tornadoDiagramUserData[1].ions.push({
+					name: item[0],
+					value: Number(item[1]),
+				});
+			}
+		});
+		this.data = tornadoDiagramUserData;
 	}
 
 	plotData() {

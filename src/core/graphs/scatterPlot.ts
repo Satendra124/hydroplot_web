@@ -35,6 +35,10 @@ class ScatterPlot implements Graph {
 
 	loadData(data: any) {
 		this.validateData(data);
+		data = data.split("\n").map((line:string)=>{
+			const [x, y] = line.split(",");
+			return [x,y]
+		})
 		this.data = data;
 	}
 
