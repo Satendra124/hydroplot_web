@@ -1,8 +1,9 @@
-import { Workbook } from "@fortune-sheet/react";
+import { Workbook, WorkbookInstance } from "@fortune-sheet/react";
 import "@fortune-sheet/react/dist/index.css"
 import '../../../styles/sheet.css'
 import { useRecoilState } from "recoil";
 import { graph_data, graph_type } from "../../recoil/atoms/dataAtom";
+import { useEffect, useRef } from "react";
 
 const Sheet = ()=>{
     const [data, setData] = useRecoilState<any>(graph_data);
@@ -13,7 +14,6 @@ const Sheet = ()=>{
         let final_data:any = [];
         rawData.split("\n").forEach((line:string)=>{
             const row = line.split(",");
-            row.pop();
             for(let e of row){
                 final_data.push({r,c,v:e});
                 c++;
@@ -24,6 +24,21 @@ const Sheet = ()=>{
         console.log(final_data);
         return final_data;
     }
+
+    const workbookRef = useRef<WorkbookInstance>(null);
+    useEffect(()=>{
+        if(!workbookRef.current) return;
+        console.log(workbookRef.current)
+        const formatedData = getFormatedData(data);
+        if(formatedData) {
+            for(const item of formatedData){
+                if(item.v === "null") item.v = null;
+                else if(item.v){
+                    workbookRef.current.setCellValue(item.r,item.c,item.v);
+                }
+            }
+        }
+    },[workbookRef])
     const saveData = (formatedData:any)=>{
         let final_data:any = [];
         for(let cell of formatedData){
@@ -43,7 +58,7 @@ const Sheet = ()=>{
     }
     return (
         <div className="sheet-wrapper">
-             <Workbook data={[{ name: "Sheet1"}]} onChange={save} />
+             <Workbook data={[{ name: "Sheet1"}]} ref={workbookRef}/>
         </div>
     )
 }

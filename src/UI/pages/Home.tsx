@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Canvas from "./components/canvas";
 import '../../styles/home.css';
 import Splitter, { SplitDirection } from '@devbookhq/splitter'
@@ -7,6 +7,7 @@ import Panel from "./components/panel";
 import Sheet from "./components/sheet";
 import { useRecoilState } from "recoil";
 import { graph_data, graph_type } from "../recoil/atoms/dataAtom";
+import { WorkbookInstance } from "@fortune-sheet/react";
 
 const Home = () => {
 	const diagramTypes: string[] = [
