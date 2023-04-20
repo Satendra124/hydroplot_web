@@ -24,9 +24,19 @@ class PieChart implements Graph {
 		const error = false;
 		if (error) throw Error("Data format incorrect");
 	}
-
 	loadData(data: any) {
 		this.validateData(data);
+		let colors: string[] = ["rgb(196, 244, 252)"];
+		data = data.split("\n").map((line:string)=>{
+			const [name, value, color] = line.split(",");
+			let randomColor = `rgb(${randInt(0,255)}, ${randInt(0, 255)}, ${randInt(0,255)})`;
+			while (colors.includes(randomColor)) {
+				randomColor = `rgb(${randInt(0,255)}, ${randInt(0, 255)}, ${randInt(0,255)})`;
+			}
+			colors.push(randomColor);
+
+			return {name, value: Number(value), color}
+		})
 		this.data = data;
 	}
 
@@ -62,4 +72,11 @@ class PieChart implements Graph {
 		this.plotData();
 	}
 }
+
+const randInt = (min: number, max: number) => {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 export default PieChart;

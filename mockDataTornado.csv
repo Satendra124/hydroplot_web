@@ -1,4 +1,5 @@
-"Na+",1,"cation"
+Ion Name,Ion Concentration,Ion Type
+"Na+",100,"cation"
 "K+",2,"cation"
 "Li+",3,"cation"
 "Mg2+",4,"cation"

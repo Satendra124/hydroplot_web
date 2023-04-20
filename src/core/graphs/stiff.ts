@@ -41,8 +41,18 @@ class Stiff implements Graph {
 		if (error) throw Error("Data format incorrect");
 	}
 
-	loadData(data: StiffGraphData[]) {
+	loadData(data: any) {
 		this.validateData(data);
+		// csv to array of array
+		let positionPos = 0,positionNeg=0;
+		data = data.split("\n").map((line:string)=>{
+			const [name, val] = line.split(",");
+			const value = Number(val);
+			let position;
+			if(value < 0) position = positionNeg++;
+			else position = positionPos++
+			return {name, value, position}
+		})
 		this.data = data;
 	}
 

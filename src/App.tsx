@@ -1,23 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Home from "./UI/pages/Home";
+import Upload from "./UI/pages/Upload";
+import { useRecoilState } from "recoil";
+import { graph_data } from "./UI/recoil/atoms/dataAtom";
 
 function App() {
-	const canvasRef = useRef(null);
-	useEffect(() => {
-		if (!canvasRef.current) return;
-		const canvasElement: HTMLCanvasElement = canvasRef.current;
-		canvasElement.height = 500;
-		canvasElement.width = 500;
-		const context = canvasElement.getContext("2d");
-		if (!context) return;
-	}, [canvasRef]);
-	return (
-		<>
-			{/* <canvas id="main_canvas" ref={canvasRef}></canvas> */}
-			<Home />
-		</>
-	);
+	const [data, _] = useRecoilState(graph_data);
+	return <>{data.length === 0 ? <Upload /> : <Home />}</>;
 }
 
 export default App;
