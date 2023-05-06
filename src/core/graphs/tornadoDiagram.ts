@@ -1,3 +1,4 @@
+import { SetterOrUpdater } from "recoil";
 import Canvas, { Scale } from "../canvas";
 import { createAxis } from "../components/axis";
 import Graph from "./Graph";
@@ -31,41 +32,59 @@ class TornadoDiagram implements Graph {
 		});
 	}
 
-	validateData(data: any): void {
-		const error = false;
-		if (error) throw Error("Data format incorrect");
+	validateData(data: any): boolean {
+		let error = false;
+
+		try {
+			if (
+				!(
+					data.length === 2 &&
+					(data[0].ionType === "Cation" || data[0].ionType === "Anion") &&
+					(data[1].ionType === "Cation" || data[1].ionType === "Anion") &&
+					typeof data[0].ions[0].name === "string" &&
+					typeof data[0].ions[0].value === "number" &&
+					typeof data[1].ions[0].name === "string" &&
+					typeof data[1].ions[0].value === "number"
+				)
+			)
+				error = true;
+		} catch {
+			error = true;
+		}
+		return !error;
 	}
 
 	loadData(data: any) {
-		this.validateData(data);
-		const tornadoDiagramUserData: any = [
-			{
-				ionType: "Cation",
-				color: "red",
-				ions: [],
-			},
-			{
-				ionType: "Anion",
-				color: "blue",
-				ions: [],
-			},
-		];
+		// const tornadoDiagramUserData: any = [
+		// 	{
+		// 		ionType: "Cation",
+		// 		color: "red",
+		// 		ions: [],
+		// 	},
+		// 	{
+		// 		ionType: "Anion",
+		// 		color: "blue",
+		// 		ions: [],
+		// 	},
+		// ];
 
-		data.split("\n").forEach((line: any) => {
-			const item = line.split(",");
-			if (item[2] === "cation") {
-				tornadoDiagramUserData[0].ions.push({
-					name: item[0],
-					value: Number(item[1]),
-				});
-			} else {
-				tornadoDiagramUserData[1].ions.push({
-					name: item[0],
-					value: Number(item[1]),
-				});
-			}
-		});
-		this.data = tornadoDiagramUserData;
+		// data.split("\n").forEach((line: any) => {
+		// 	const item = line.split(",");
+		// 	if (item[2] === "cation") {
+		// 		tornadoDiagramUserData[0].ions.push({
+		// 			name: item[0],
+		// 			value: Number(item[1]),
+		// 		});
+		// 	} else {
+		// 		tornadoDiagramUserData[1].ions.push({
+		// 			name: item[0],
+		// 			value: Number(item[1]),
+		// 		});
+		// 	}
+		// });
+		// this.data = tornadoDiagramUserData;
+
+		this.data = data;
 	}
 
 	plotData() {
@@ -99,7 +118,14 @@ class TornadoDiagram implements Graph {
 		context.fill();
 	}
 
-	draw(data: any) {
+	draw(data: any, setError: SetterOrUpdater<boolean>) {
+		const validated = this.validateData(data);
+		if (!validated) {
+			// alert("Data format incorrect");
+			setError(true);
+			return;
+		}
+		setError(false);
 		this.drawAxis();
 		this.loadData(data);
 		this.plotData();

@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import Canvas from "./components/canvas";
+import UICanvas from "../components/canvas";
 import "../../styles/home.css";
 import Splitter, { SplitDirection } from "@devbookhq/splitter";
 import logo from "../../assets/logo-no-background.svg";
-import Panel from "./components/panel";
-import Sheet from "./components/sheet";
+import Panel from "../components/panel";
+import Sheet from "../components/sheet";
 import { useRecoilState } from "recoil";
-import { graph_data, graph_type } from "../recoil/atoms/dataAtom";
+import { graph_data, graph_type, graph_error } from "../recoil/atoms/dataAtom";
 import { WorkbookInstance } from "@fortune-sheet/react";
+
+import getFormattedData from "../utils/dataParser";
 
 const Home = () => {
 	const diagramTypes: string[] = [
@@ -20,9 +22,23 @@ const Home = () => {
 	];
 	const [graphType, setGraphType] = useRecoilState(graph_type);
 	const [data, setData] = useRecoilState(graph_data);
+	const [error, setError] = useRecoilState(graph_error);
 	console.log(data);
+
 	return (
 		<div className="home">
+			{/* <button
+				onClick={handleClick}
+				style={{
+					position: "absolute",
+					top: "80px",
+					right: "10px",
+					width: "100px",
+					height: "50px",
+					border: "2px solid black",
+				}}>
+				Click me
+			</button> */}
 			<div className="app-bar">
 				<img src={logo} alt="Hydroplot" />
 				<div className="active">Home</div>
@@ -41,7 +57,7 @@ const Home = () => {
 						initialSizes={[55, 45]}
 						gutterClassName="gutter"
 						draggerClassName="dragger">
-						<Canvas />
+						<UICanvas />
 						<Sheet />
 					</Splitter>
 				</Splitter>

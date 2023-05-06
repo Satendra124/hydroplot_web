@@ -1,33 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
+
+import getFormattedData from "./UI/utils/dataParser";
+
 import Stiff from "./core/graphs/stiff";
 import ScatterPlot from "./core/graphs/scatterPlot";
 import Piper from "./core/graphs/piper";
 import LineGraph from "./core/graphs/lineGraph";
 import PieChart from "./core/graphs/pieChart";
 import TornadoDiagram from "./core/graphs/tornadoDiagram";
-import stiffGraphMockData from "./core/data/mocks/stiff.mock";
-import scatterPlotMockData from "./core/data/mocks/scatter.mock";
-import lineGraphMockData from "./core/data/mocks/line.mock";
-import pieChartMockData from "./core/data/mocks/pie.mock";
-import tornadoDiagramMockData from "./core/data/mocks/tornado.mock";
+import { SetterOrUpdater, useRecoilState } from "recoil";
+import { graph_error } from "./UI/recoil/atoms/dataAtom";
 
 const drawDiagram = (
 	graph: any,
 	graphType: string,
 	userData: any,
-	mockData: any
+	setError: SetterOrUpdater<boolean>
 ) => {
 	if (userData.type === graphType && userData.data.length > 0) {
 		console.log("Drawing User Data");
-		graph.draw(userData.data);
+		graph.draw(getFormattedData(userData.data, graphType, setError), setError);
+		// graph.draw(userData.data);
 	} else {
-		console.log("Drawing Mock Data");
-		graph.draw(mockData);
+		console.log("Error");
 	}
 };
 
-const Canvas = ({ graph, userData }: { graph: string; userData: any }) => {
+const Canvas = ({ graph, userData }: { graph: any; userData: any }) => {
 	const canvasRef = useRef(null);
+	const [_, setError] = useRecoilState(graph_error);
 
 	useEffect(() => {
 		if (!canvasRef.current) return;
@@ -39,22 +40,22 @@ const Canvas = ({ graph, userData }: { graph: string; userData: any }) => {
 
 		if (graph === "Stiff Diagram") {
 			const stiffDiagram = new Stiff(context);
-			drawDiagram(stiffDiagram, graph, userData, stiffGraphMockData);
+			drawDiagram(stiffDiagram, graph, userData, setError);
 		} else if (graph === "Piper Diagram") {
 			const piperDiagram = new Piper(context);
 			piperDiagram.draw([]);
 		} else if (graph === "Scatter Plot") {
 			const scatterPlot = new ScatterPlot(context);
-			drawDiagram(scatterPlot, graph, userData, scatterPlotMockData);
+			drawDiagram(scatterPlot, graph, userData, setError);
 		} else if (graph === "Line Graph") {
 			const lineGraph = new LineGraph(context);
-			drawDiagram(lineGraph, graph, userData, lineGraphMockData);
+			drawDiagram(lineGraph, graph, userData, setError);
 		} else if (graph === "Pie Chart") {
 			const pieChart = new PieChart(context);
-			drawDiagram(pieChart, graph, userData, pieChartMockData);
+			drawDiagram(pieChart, graph, userData, setError);
 		} else if (graph === "Tornado Diagram") {
 			const tornadoDiagram = new TornadoDiagram(context);
-			drawDiagram(tornadoDiagram, graph, userData, tornadoDiagramMockData);
+			drawDiagram(tornadoDiagram, graph, userData, setError);
 		}
 	}, [canvasRef, graph, userData]);
 

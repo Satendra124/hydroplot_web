@@ -1,3 +1,4 @@
+import { SetterOrUpdater } from "recoil";
 import Canvas, { Scale } from "../canvas";
 import Graph from "./Graph";
 
@@ -20,23 +21,43 @@ class PieChart implements Graph {
 		context.clearRect(0, 0, 500, 500);
 	}
 
-	validateData(data: any): void {
-		const error = false;
-		if (error) throw Error("Data format incorrect");
-	}
-	loadData(data: any) {
-		this.validateData(data);
-		let colors: string[] = ["rgb(196, 244, 252)"];
-		data = data.split("\n").map((line:string)=>{
-			const [name, value, color] = line.split(",");
-			let randomColor = `rgb(${randInt(0,255)}, ${randInt(0, 255)}, ${randInt(0,255)})`;
-			while (colors.includes(randomColor)) {
-				randomColor = `rgb(${randInt(0,255)}, ${randInt(0, 255)}, ${randInt(0,255)})`;
+	validateData(data: any): boolean {
+		console.log(data);
+		let error = false;
+		try {
+			if (
+				!(
+					Object.keys(data[0]).length === 3 &&
+					typeof data[0].name === "string" &&
+					typeof data[0].value === "number"
+				)
+			) {
+				error = true;
 			}
-			colors.push(randomColor);
+		} catch {
+			error = true;
+		}
+		return !error;
+	}
 
-			return {name, value: Number(value), color}
-		})
+	loadData(data: any) {
+		// let colors: string[] = ["rgb(196, 244, 252)"];
+		// data = data.split("\n").map((line: string) => {
+		// 	const [name, value, color] = line.split(",");
+		// 	let randomColor = `rgb(${randInt(0, 255)}, ${randInt(0, 255)}, ${randInt(
+		// 		0,
+		// 		255
+		// 	)})`;
+		// 	while (colors.includes(randomColor)) {
+		// 		randomColor = `rgb(${randInt(0, 255)}, ${randInt(0, 255)}, ${randInt(
+		// 			0,
+		// 			255
+		// 		)})`;
+		// 	}
+		// 	colors.push(randomColor);
+
+		// 	return { name, value: Number(value), color };
+		// });
 		this.data = data;
 	}
 
@@ -50,7 +71,6 @@ class PieChart implements Graph {
 		let prevAngle: number = 0;
 		for (let i = 0; i < this.data.length; i++) {
 			let angle: number = (this.data[i].value / sum) * 2 * Math.PI;
-			// console.log(prevAngle, angle);
 			context.beginPath();
 			context.arc(150, 250, 80, prevAngle, prevAngle + angle);
 			prevAngle += angle;
@@ -66,7 +86,14 @@ class PieChart implements Graph {
 		}
 	}
 
-	draw(data: any) {
+	draw(data: any, setError: SetterOrUpdater<boolean>) {
+		const validated = this.validateData(data);
+		if (!validated) {
+			// alert("Data format incorrect");
+			setError(true);
+			return;
+		}
+		setError(false);
 		this.drawAxis();
 		this.loadData(data);
 		this.plotData();
@@ -77,6 +104,6 @@ const randInt = (min: number, max: number) => {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min + 1) + min);
-}
+};
 
 export default PieChart;

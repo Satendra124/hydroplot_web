@@ -12,17 +12,31 @@ const fileTypes = ["CSV"];
 const Upload = () => {
 	const [data, setData] = useRecoilState(graph_data);
 	const handleChange = async (file: any) => {
-		Papa.parse(file, {
-			header: false,
-			skipEmptyLines: true,
-			complete: (results) => {
-				setData(results.data);
-				console.log(results.data);
-			},
-		});
+		const textData = await file.text();
+
+		let parsedData = [];
+		const lineData = textData.split("\n");
+		for (let i = 0; i < lineData.length; i++) {
+			if (i === 0) continue;
+
+			let words = lineData[i];
+			let row = words.split(",");
+			let data = [];
+			for (let word of row) {
+				if (isNaN(word)) {
+					data.push(word);
+				} else {
+					data.push(Number(word));
+				}
+			}
+			parsedData.push(data);
+		}
+		// console.log(parsedData);
+		// setData(textData);
+		setData(parsedData);
 	};
 
-	console.log(data);
+	for (let words in data);
 	return (
 		<div className="upload">
 			<div>

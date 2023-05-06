@@ -1,3 +1,4 @@
+import { SetterOrUpdater } from "recoil";
 import Canvas, { Scale } from "../canvas";
 import { createAxis } from "../components/axis";
 import Graph from "./Graph";
@@ -26,17 +27,29 @@ class LineGraph implements Graph {
 		});
 	}
 
-	validateData(data: any): void {
-		const error = false;
-		if (error) throw Error("Data format incorrect");
+	validateData(data: any): boolean {
+		console.log(data);
+		let error = false;
+		try {
+			if (
+				!(
+					data[0].length === 2 &&
+					isNaN(data[0][0]) === false &&
+					typeof data[0][1] === "number"
+				)
+			)
+				error = true;
+		} catch {
+			error = true;
+		}
+		return !error;
 	}
 
 	loadData(data: any) {
-		this.validateData(data);
-		data = data.split("\n").map((line:string)=>{
-			const [x, y] = line.split(",");
-			return [x,y]
-		})
+		// data = data.split("\n").map((line:string)=>{
+		// 	const [x, y] = line.split(",");
+		// 	return [x,y]
+		// })
 		this.data = data;
 	}
 
@@ -69,7 +82,14 @@ class LineGraph implements Graph {
 		context.fill();
 	}
 
-	draw(data: any) {
+	draw(data: any, setError: SetterOrUpdater<boolean>) {
+		const validated = this.validateData(data);
+		if (!validated) {
+			// alert("Data format incorrect");
+			setError(true);
+			return;
+		}
+		setError(false);
 		this.drawAxis();
 		this.loadData(data);
 		this.plotData();

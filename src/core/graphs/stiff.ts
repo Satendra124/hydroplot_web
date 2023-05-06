@@ -1,3 +1,4 @@
+import { SetterOrUpdater } from "recoil";
 import Canvas, { Scale } from "../canvas";
 import { createAxis } from "../components/axis";
 import { createPolygon } from "../components/polygon";
@@ -36,23 +37,36 @@ class Stiff implements Graph {
 		});
 	}
 
-	validateData(data: StiffGraphData[]): void {
-		const error = false;
-		if (error) throw Error("Data format incorrect");
+	validateData(data: any): boolean {
+		console.log(data);
+		let error = false;
+		try {
+			if (
+				!(
+					Object.keys(data[0]).length === 3 &&
+					typeof data[0].name === "string" &&
+					typeof data[0].value === "number" &&
+					typeof data[0].position === "number"
+				)
+			)
+				error = true;
+		} catch {
+			error = true;
+		}
+		return !error;
 	}
 
 	loadData(data: any) {
-		this.validateData(data);
 		// csv to array of array
-		let positionPos = 0,positionNeg=0;
-		data = data.split("\n").map((line:string)=>{
-			const [name, val] = line.split(",");
-			const value = Number(val);
-			let position;
-			if(value < 0) position = positionNeg++;
-			else position = positionPos++
-			return {name, value, position}
-		})
+		// let positionPos = 0,positionNeg=0;
+		// data = data.split("\n").map((line:string)=>{
+		// 	const [name, val] = line.split(",");
+		// 	const value = Number(val);
+		// 	let position;
+		// 	if(value < 0) position = positionNeg++;
+		// 	else position = positionPos++
+		// 	return {name, value, position}
+		// })
 		this.data = data;
 	}
 
@@ -80,7 +94,14 @@ class Stiff implements Graph {
 		context.fill();
 	}
 
-	draw(data: StiffGraphData[]) {
+	draw(data: any, setError: SetterOrUpdater<boolean>) {
+		const validated = this.validateData(data);
+		if (!validated) {
+			// alert("Data format incorrect");
+			setError(true);
+			return;
+		}
+		setError(false);
 		this.drawAxis();
 		this.loadData(data);
 		this.plotData();
